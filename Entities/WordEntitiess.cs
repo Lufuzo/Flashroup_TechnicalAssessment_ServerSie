@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Word
+    public class WordEntitiess
     {
         public int Id { get; set; }
         public string? Value { get; set; }

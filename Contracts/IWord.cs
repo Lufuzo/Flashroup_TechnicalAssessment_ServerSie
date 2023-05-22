@@ -9,10 +9,10 @@ namespace Contracts
 {
     public interface IWord
     {
-        Task<IEnumerable<Word>> GetWords();
-        Task<Word> GetWord(int id);
-        Task<Word> Create(Word word);
-        Task<string> UpdateWord(int id, Word word);
+        Task<IEnumerable<WordEntitiess>> GetWords();
+        Task<WordEntitiess> GetWord(int id);
+        Task<WordEntitiess> Create(WordEntitiess word);
+        Task<string> UpdateWord(int id, WordEntitiess word);
         Task<string>  DeleteWord(int id);
         
     }

@@ -14,7 +14,7 @@ namespace Domain
         {
 
         }
-        public DbSet<Word> Words { get; set; }
+        public DbSet<WordEntitiess> Words { get; set; }
 
 
     }

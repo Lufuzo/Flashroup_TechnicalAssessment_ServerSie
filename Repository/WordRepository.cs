@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Repository
 {
     public class WordRepository : IWord
@@ -20,19 +21,20 @@ namespace Repository
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Word>> GetWords()
+
+        public async Task<IEnumerable<WordEntitiess>> GetWords()
         {
             return await _dbContext.Words.ToListAsync();
         }
 
-        public async Task<Word> Create(Word word)
+        public async Task<WordEntitiess> Create(WordEntitiess word)
         {
             _dbContext.Words.Add(word);
             await _dbContext.SaveChangesAsync();
             return word;
         }
 
-        public async Task<Word> GetWord(int id)
+        public async Task<WordEntitiess> GetWord(int id)
         {
             var record = await _dbContext.Words.FindAsync(id);
           
@@ -40,12 +42,12 @@ namespace Repository
             return record;
         }
 
-        public async Task<string> UpdateWord(int id, Word word)
+        public async Task<string> UpdateWord(int id, WordEntitiess word)
         {
 
             if (id != word.Id)
             {
-                string mess = "Id are not teh same";
+                string mess = "Id are not the same";
                 return mess;
             }
             _dbContext.Entry(word).State = EntityState.Modified;
@@ -68,7 +70,7 @@ namespace Repository
                     throw;
                 }
             }
-            string message = "Successfullu Updated!";
+            string message = "Successfully Updated!";
             return message;
 
         }

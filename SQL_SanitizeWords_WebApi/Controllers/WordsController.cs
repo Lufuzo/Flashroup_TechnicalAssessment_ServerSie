@@ -30,7 +30,7 @@ namespace SQL_SanitizeWords_WebApi.Controllers
         [HttpGet("{id}")]
         public  async Task<ActionResult<Word>> GetWord(int id)
         {
-            Entities.Word viewModel = new Entities.Word();
+            Entities.WordEntitiess viewModel = new Entities.WordEntitiess();
             var record = await _iword.GetWord(id);
             if (record == null)
             {
@@ -40,14 +40,14 @@ namespace SQL_SanitizeWords_WebApi.Controllers
             //viewModel.Value = record.Value;
 
 
-            return Ok();
+            return Ok(record);
         }
         [HttpPost]
-        public async Task<ActionResult<Entities.Word>> Create(Word word)
+        public async Task<ActionResult<Word>> Create(Word word)
         {
             if (ModelState.IsValid)
             {
-                Entities.Word  viewModel = new Entities.Word();
+                Entities.WordEntitiess  viewModel = new Entities.WordEntitiess();
                 viewModel.Id = word.Id;
                  viewModel.Value = word.Value;
 
@@ -67,7 +67,7 @@ namespace SQL_SanitizeWords_WebApi.Controllers
             {
                 return BadRequest();
             }
-            Entities.Word viewModel = new Entities.Word();
+            Entities.WordEntitiess viewModel = new Entities.WordEntitiess();
             viewModel.Id = word.Id;
             viewModel.Value = word.Value;
             var rec = await _iword.UpdateWord(id, viewModel);
@@ -75,7 +75,7 @@ namespace SQL_SanitizeWords_WebApi.Controllers
             return Ok();
         }
 
-       
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteWord(int id)
@@ -90,7 +90,7 @@ namespace SQL_SanitizeWords_WebApi.Controllers
             {
                 return NotFound();
 
-            }    
+            }
             return Ok();
         }
     }
