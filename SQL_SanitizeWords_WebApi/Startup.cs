@@ -38,7 +38,7 @@ namespace SQL_SanitizeWords_WebApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SQL_SanitizeWords_WebApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SQl Sanitize", Version = "v1" });
                 
 
             });

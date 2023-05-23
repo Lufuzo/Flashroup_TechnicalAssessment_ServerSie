@@ -2,8 +2,12 @@
 using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SQL_SanitizeWords_WebApi.Model;
+using System.IO;
+
 using Word = SQL_SanitizeWords_WebApi.Model.Word;
 
 namespace SQL_SanitizeWords_WebApi.Controllers
@@ -15,12 +19,17 @@ namespace SQL_SanitizeWords_WebApi.Controllers
      //   private readonly WordContext _dbContext;
 
         public readonly IWord _iword;
+        
+
 
         public WordsController(IWord iword)
         {
             _iword = iword;
         }
 
+
+
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Word>>> GetWords()
         {
@@ -93,5 +102,9 @@ namespace SQL_SanitizeWords_WebApi.Controllers
             }
             return Ok();
         }
+
+      
+       
+
     }
 }
