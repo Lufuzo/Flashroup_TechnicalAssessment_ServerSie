@@ -36,7 +36,9 @@ namespace SQL_SanitizeWords_WebApi.Controllers
       
             return Ok(await _iword.GetWords());
         }
-        [HttpGet("{id}")]
+        // [HttpGet("{id:int}")]
+        [HttpGet]
+        [Route("{id:int}")]
         public  async Task<ActionResult<Word>> GetWord(int id)
         {
             Entities.WordEntitiess viewModel = new Entities.WordEntitiess();
@@ -56,19 +58,40 @@ namespace SQL_SanitizeWords_WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                Entities.WordEntitiess  viewModel = new Entities.WordEntitiess();
-                viewModel.Id = word.Id;
-                 viewModel.Value = word.Value;
+                Word w = new Word();
 
-                var newEntry = await _iword.Create(viewModel);
-                return CreatedAtAction(nameof(GetWords), new { id = newEntry.Id }, newEntry);
+                var checkWord = GetWordFromFIle();
+
+                w.Value = word.Value;
+                var result = checkWord.Where(x => x.FileValues.Any(y => y.Contains(w.Value))).ToList();
+                if (result.Count == 0)
+                {
+                    Entities.WordEntitiess viewModel = new Entities.WordEntitiess();
+                    viewModel.Id = word.Id;
+                    viewModel.Value = word.Value;
+
+                    var newEntry = await _iword.Create(viewModel);
+                    return CreatedAtAction(nameof(GetWords), new { id = newEntry.Id }, newEntry);
+
+                }
+                else
+                {
+
+                   return BadRequest("Dangerous input Sensitive not inserted in the database !");
+
+                }
+
+
+               
 
             }
             return  BadRequest("Invalid record insert Fail!");
             
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("{id:int}")]
+
         public async Task<ActionResult> UpdateWord(int id, Word word)
         {
 
@@ -77,16 +100,29 @@ namespace SQL_SanitizeWords_WebApi.Controllers
                 return BadRequest();
             }
             Entities.WordEntitiess viewModel = new Entities.WordEntitiess();
-            viewModel.Id = word.Id;
-            viewModel.Value = word.Value;
-            var rec = await _iword.UpdateWord(id, viewModel);
-    
+           
+            var checkWord = GetWordFromFIle();
+        
+            var result = checkWord.Where(x => x.FileValues.Any(y => y.Contains(word.Value))).ToList();
+            if (result.Count == 0)
+            {
+                viewModel.Id = word.Id;
+                viewModel.Value = word.Value;
+                var rec = await _iword.UpdateWord(id, viewModel);
+            }
+            else
+            {
+
+                return BadRequest("Dangerous input Sensitive not inserted in the database !");
+
+            }
+
             return Ok();
         }
 
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteWord(int id)
         {
             if (_iword.DeleteWord == null)
@@ -104,7 +140,49 @@ namespace SQL_SanitizeWords_WebApi.Controllers
         }
 
       
-       
+       // create list 
+
+        public class FileValue
+        {
+            public List<string> FileValues { get; set; }
+
+            public FileValue()
+            {
+                FileValues = new List<string>();
+            }
+        }
+        // reading a file
+        private static List<FileValue> GetWordFromFIle()
+        {
+            string path = "C:\\Users\\Lungelo Mbalane\\Documents\\Visual Studio 2022\\SQL_Words_Application\\SQL_SanitizeWords_WebApi\\SQL_SanitizeWords_WebApi\\sql_sensitive_list.txt";
+
+            var fileValues = new List<FileValue>();
+            var fileValue = new FileValue();
+           
+            List<String[]> arrayList = new List<String[]>();
+            //string [] words = File.ReadAllLines(path).ToString();
+            using (StreamReader file = new StreamReader(path))
+            {
+                //int counter = 0;
+                string line = String.Empty;
+
+                while (!String.IsNullOrEmpty(line = file.ReadLine()))
+                {
+                    fileValue.FileValues.Add(line);
+                    fileValues.Add(fileValue);
+
+                   
+                }
+
+    
+                file.Close();
+
+
+            }
+
+
+            return fileValues;
+      }
 
     }
 }

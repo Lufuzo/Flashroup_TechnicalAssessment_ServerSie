@@ -71,6 +71,8 @@ namespace SQL_SanitizeWords_WebApi
 
             app.UseHttpsRedirection();
 
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.UseRouting();
 
             app.UseAuthorization();
